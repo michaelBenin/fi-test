@@ -58,6 +58,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			
 			for (var i in gallery.imageProperties)
 			{
+				
 				if (Number(i) === 0)
 				{
 					gallery.imageProperties[i]['map'] = {x:10, y:10, w: gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
@@ -81,11 +82,13 @@ window.fiGallery = (function (w, d) //initialize one global variable
 						}
 						gallery.heightValues.length = 0;
 						gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.currenty, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
+						gallery.heightValues.push(gallery.imageProperties[i].sizes[1][1]);
+						gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];
+						
 					}
 					else if(gallery.currentx + gallery.imageProperties[i].sizes[1][0] < window.innerWidth)
 					{
 						gallery.heightValues.push(gallery.imageProperties[i].sizes[1][1]);
-						
 						gallery.imageProperties[i]['map'] = {x: gallery.currentx, y: gallery.currenty, w: gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 						gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];
 					}
@@ -158,7 +161,9 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		for (var i in this.imageProperties)
 			{ 
 				this.canvas2d.drawImage(this.images[i], this.imageProperties[i].map.x, this.imageProperties[i].map.y, this.imageProperties[i].map.w, this.imageProperties[i].map.h);
+				console.log(this.imageProperties[i].map.x + " , " + this.imageProperties[i].map.y );
 			}
+			
 	}
 	
 	function collides(list, x, y) 
