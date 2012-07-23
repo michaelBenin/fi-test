@@ -98,6 +98,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 					if(gallery.imageProperties[i].sizes[1][0] + gallery.currentx > window.innerWidth)
 					{
 						gallery.currentx = 10;
+						gallery.currenty = 10 + gallery.currenty + gallery.imageProperties[i].sizes[1][1];
 					}
 					gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.currenty, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 					if(window.innerHeight < gallery.currenty)
