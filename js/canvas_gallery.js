@@ -123,9 +123,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		//Controller / Views: JS MV*/MVC/MVVC Backbone/Angular/Ember, No thanks, I'll write my own but know how to use them if entering a project	
 		this.canvas.addEventListener('click', function(e) 
 		{ 
-			alert(gallery.imageProperties[0].map.x);
-			alert(e.offsetX);
-			alert(collides(gallery.imageProperties, e.offsetX, e.offsetY));
+			alert(collides(gallery.imageProperties, e.clientX, e.clientY));
 		});
 
 		
