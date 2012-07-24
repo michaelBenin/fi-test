@@ -21,13 +21,15 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		/* Model */
 		this.set = s; // for new gallery data
 		this.imageProperties = [];// used to store the image mapping in gallery for click events
-		this.setImage = function(src)
+		this.setImage = function(src, obj)
 		{
+			var o = obj;
 			var img = new Image();
 			img.onload = function()
 			{ 
+				gallery.imageProperties.push(o);		
 				gallery.images.push(img);
-				if(gallery.imageProperties.length !== 0 && gallery.imageProperties.length === gallery.images.length)
+				if(gallery.total !== 0 && gallery.total === gallery.images.length)
 				{
 					gallery.init();	
 				}
@@ -39,6 +41,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		this.images = []; // used to store the actual image objects 
 		this.currentx = 10;
 		this.currenty = 10;
+		this.total = 0;
 		this.heightValues = [];
 		this.currentImage;
 		this.state = 'gallery';
@@ -48,9 +51,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			{
 				if (typeof(data[i].entities.media[0]) !== 'undefined')
 				{
-					gallery.setImage(data[i].entities.media[0].media_url_https);
-					//alert(img.src);
-					var imageObj = 
+						this.total++;
+						var imageObj = 
 						{
 							title: data[0].entities.hashtags[0].text,
 							text: data[i].textdata,
@@ -62,9 +64,10 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							[data[i].entities.media[0].sizes.large.w, data[0].entities.media[0].sizes.large.h]
 							]
 						};
-						gallery.imageProperties.push(imageObj);
+						gallery.setImage(data[i].entities.media[0].media_url_https, imageObj);
 				}
 			}
+			
 		this.init = function()
 		{
 			gallery.currentx = 10;
@@ -139,10 +142,24 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		//Controller / Views: JS MV*/MVC/MVVC Backbone/Angular/Ember, No thanks, I'll write my own but know how to use them if entering a project	
 		this.canvas.addEventListener('click', function(e) 
 		{ 
-			gallery.currentImage = collides(gallery.imageProperties, e.clientX, (e.clientY+window.pageYOffset));
-		    var x  = (window.innerWidth * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][0] * .5);
-			var y = (window.innerHeight * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][1] * .5);
-			gallery.canvas2d.drawImage(gallery.images[gallery.currentImage], x, y, gallery.imageProperties[gallery.currentImage].sizes[3][0], gallery.imageProperties[gallery.currentImage].sizes[3][1]);
+			if(gallery.state === 'gallery')
+			{
+				gallery.state = 'view';
+				gallery.currentImage = collides(gallery.imageProperties, e.clientX, (e.clientY+window.pageYOffset));
+				if (gallery.currentImage !== false)
+				{
+					gallery.canvas2d.fillStyle = 'hsl(255, 255, 255)';
+					gallery.canvas2d.fillRect(0, 0, gallery.canvas.width, gallery.canvas.height);
+					var x  = (window.innerWidth * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][0] * .5);
+					var y = (window.innerHeight * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][1] * .5);
+					gallery.canvas2d.drawImage(gallery.images[gallery.currentImage], x, y, gallery.imageProperties[gallery.currentImage].sizes[3][0], gallery.imageProperties[gallery.currentImage].sizes[3][1]);
+				}
+			}
+			else if (gallery.state === 'view')
+			{
+				gallery.state = 'gallery';
+				gallery.init();	
+			}
 		});
 
 		
@@ -155,6 +172,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		{
 			if (keys[e.keyCode])
 			{
+				gallery.canvas2d.fillStyle = 'hsl(255, 255, 255)';
+				gallery.canvas2d.fillRect(0, 0, gallery.canvas.width, gallery.canvas.height);
 				keys[e.keyCode].call(gallery, e);
 			}
 		});
@@ -165,16 +184,30 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		{
 			37: function (e)
 			{
-				this.currentImage--;
-		    	var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5);
-				var y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
+				if (this.currentImage !== 0)
+				{
+					this.currentImage--;
+				}
+				else if(this.currentImage === 0)
+				{
+					this.currentImage = this.imageProperties.length-1;	
+				}
+				var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5),
+					y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
 				this.canvas2d.drawImage(this.images[this.currentImage], x, y, this.imageProperties[this.currentImage].sizes[3][0], this.imageProperties[this.currentImage].sizes[3][1]);
 			},
 			39: function (e)
 			{
-				this.currentImage++;
+				if (this.currentImage !== this.imageProperties.length-1)
+				{
+					this.currentImage++;
+				}
+				else if(this.currentImage === this.imageProperties.length-1)
+				{
+					this.currentImage = 0;	
+				}
 		    	var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5);
-				var y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
+				var y = 10;//(window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
 				this.canvas2d.drawImage(this.images[this.currentImage], x, y, this.imageProperties[this.currentImage].sizes[3][0], this.imageProperties[this.currentImage].sizes[3][1]);
 			}
 		};
