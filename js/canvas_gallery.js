@@ -126,16 +126,9 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		this.canvas.addEventListener('click', function(e) 
 		{ 
 			gallery.currentImage = collides(gallery.imageProperties, e.clientX, (e.clientY+window.pageYOffset));
-<<<<<<< HEAD
 		    var x  = (window.innerWidth * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][0] * .5);
 			var y = (window.innerHeight * .5) - (gallery.imageProperties[gallery.currentImage].sizes[3][1] * .5);
 			gallery.canvas2d.drawImage(gallery.images[gallery.currentImage], x, y, gallery.imageProperties[gallery.currentImage].sizes[3][0], gallery.imageProperties[gallery.currentImage].sizes[3][1]);
-=======
-			alert(e.clientX +' '+ e.clientY);
-			alert(window.pageXOffset + ' ' + window.pageYOffset)
-			alert(gallery.currentImage);
->>>>>>> a419ba0552887f7825cda756eb10cf0058021cf3
-			
 		});
 
 		
