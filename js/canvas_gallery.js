@@ -151,11 +151,17 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		{
 			37: function (e)
 			{
-				alert(e.keyCode)
+				this.currentImage--;
+		    	var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5);
+				var y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
+				this.canvas2d.drawImage(this.images[this.currentImage], x, y, this.imageProperties[this.currentImage].sizes[3][0], this.imageProperties[this.currentImage].sizes[3][1]);
 			},
 			39: function (e)
 			{
-				alert(e.keyCode)
+				this.currentImage++;
+		    	var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5);
+				var y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
+				this.canvas2d.drawImage(this.images[this.currentImage], x, y, this.imageProperties[this.currentImage].sizes[3][0], this.imageProperties[this.currentImage].sizes[3][1]);
 			}
 		};
 	/* Methods */
