@@ -25,6 +25,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		this.currentx = 10;
 		this.currenty = 10;
 		this.heightValues = [];
+		this.currentImage;
+		this.state = 'gallery';
 		
 		//filter data
 		for(var i in this.data) // iterate through the data, some media did not have valid data to compare consecutively
@@ -123,7 +125,11 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		//Controller / Views: JS MV*/MVC/MVVC Backbone/Angular/Ember, No thanks, I'll write my own but know how to use them if entering a project	
 		this.canvas.addEventListener('click', function(e) 
 		{ 
-			alert(collides(gallery.imageProperties, e.clientX, e.clientY));
+			gallery.currentImage = collides(gallery.imageProperties, e.clientX, (e.clientY+window.pageYOffset));
+			alert(e.clientX +' '+ e.clientY);
+			alert(window.pageXOffset + ' ' + window.pageYOffset)
+			alert(gallery.currentImage);
+			
 		});
 
 		
