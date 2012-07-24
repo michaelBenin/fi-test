@@ -20,7 +20,22 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		
 		/* Model */
 		this.set = s; // for new gallery data
-		this.imageProperties = []; // used to store the image mapping in gallery for click events
+		this.imageProperties = [];// used to store the image mapping in gallery for click events
+		this.setImage = function(src)
+		{
+			var img = new Image();
+			img.onload = function()
+			{ 
+				gallery.images.push(img);
+				if(gallery.imageProperties.length !== 0 && gallery.imageProperties.length === gallery.images.length)
+				{
+					gallery.init();	
+				}
+			}
+			img.src = src;
+			
+			
+		}
 		this.images = []; // used to store the actual image objects 
 		this.currentx = 10;
 		this.currenty = 10;
@@ -33,10 +48,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			{
 				if (typeof(data[i].entities.media[0]) !== 'undefined')
 				{
-					var img = new Image();
-					img.src = data[i].entities.media[0].media_url_https; 
-					gallery.images.push(img);
-					
+					gallery.setImage(data[i].entities.media[0].media_url_https);
+					//alert(img.src);
 					var imageObj = 
 						{
 							title: data[0].entities.hashtags[0].text,
@@ -120,7 +133,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			updateGallery.call(gallery);
 		}
 		
-		this.init();
+		
+		//this.init();
 		
 		//Controller / Views: JS MV*/MVC/MVVC Backbone/Angular/Ember, No thanks, I'll write my own but know how to use them if entering a project	
 		this.canvas.addEventListener('click', function(e) 
