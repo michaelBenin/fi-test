@@ -58,11 +58,33 @@ window.fiGallery = (function (w, d) //initialize one global variable
 				if (typeof(data[i].entities.media[0]) !== 'undefined')
 				{
 						gallery.total++;
+						var title = 'Hashtag Unavailable', 
+								text = 'Tweet Unavailable', 
+								url= 'Url Unavailable';
+								
+						if(typeof(data[i].entities.hashtags[0]) !== 'undefined')
+						{
+							title = data[i].entities.hashtags[0].text;	
+						}
+						
+						if(typeof(data[i].textdata) !== 'undefined')
+						{
+							text = data[i].textdata;	
+						}
+						
+						if(typeof(data[i].entities.media[0].media_url_https) !== 'undefined')
+						{
+							text = data[i].entities.media[0].media_url_https;	
+						}
+						
+						
+						
 						var imageObj = 
 						{
-							title: data[0].entities.hashtags[0].text,
-							text: data[i].textdata,
-							url: data[i].entities.media[0].media_url_https, 
+							
+							title: title,
+							text: text,
+							url: url,
 							sizes: [ 
 							[data[i].entities.media[0].sizes.thumb.w, data[0].entities.media[0].sizes.thumb.h],
 							[data[i].entities.media[0].sizes.small.w, data[0].entities.media[0].sizes.small.h],
@@ -164,6 +186,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 				gallery.state = 'gallery';
 				gallery.init();	
 			}
+			window.scrollTo(0,0)
 		});
 
 		
@@ -271,7 +294,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 window.addEventListener('load', function (e)
 	{
 		var script = document.createElement("script");
-		script.src = "https://api.twitter.com/1/statuses/media_timeline.json?offset=0&count=100&score=true&is_event=false&filter=false&include_entities=true&user=F_i&callback=fiGallery.gallery";
+		script.src = "https://api.twitter.com/1/statuses/media_timeline.json?offset=0&count=500&score=true&is_event=false&filter=false&include_entities=true&user=grantimahara&callback=fiGallery.gallery";
 		document.getElementsByTagName("head")[0].appendChild(script);
 
 		}
