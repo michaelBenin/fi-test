@@ -5,14 +5,12 @@ Michael Benin 2012
 /* 	Begin App */
 window.fiGallery = (function (w, d) //initialize one global variable
 {
-	console.log('gallery init');
 	
 	
 	var galleryNum = 0; // for multiple galleries, should begin at 0
 	/* 	Constructor */
 	function Gallery(data)
 	{
-		console.log('gallery initialized');
 		/* 	Initialize Variables */
 		var gallery = this; //define object to access out of scope
 		this.data = data;
@@ -55,7 +53,9 @@ window.fiGallery = (function (w, d) //initialize one global variable
 		//filter data
 		for(var i in gallery.data) // iterate through the data, some media did not have valid data to compare consecutively
 			{
-				if (typeof(data[i].entities.media[0]) !== 'undefined')
+				console.log(i);
+				console.log(data[i].entities.media);
+				if (typeof(data[i].entities.media) !== 'undefined' && data[i].entities.media.length !== 0)
 				{
 						gallery.total++;
 						var title = 'Hashtag Unavailable', 
@@ -86,10 +86,10 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							text: text,
 							url: url,
 							sizes: [ 
-							[data[i].entities.media[0].sizes.thumb.w, data[0].entities.media[0].sizes.thumb.h],
-							[data[i].entities.media[0].sizes.small.w, data[0].entities.media[0].sizes.small.h],
-							[data[i].entities.media[0].sizes.medium.w, data[0].entities.media[0].sizes.medium.h],
-							[data[i].entities.media[0].sizes.large.w, data[0].entities.media[0].sizes.large.h]
+							[data[i].entities.media[0].sizes.thumb.w, data[i].entities.media[0].sizes.thumb.h],
+							[data[i].entities.media[0].sizes.small.w, data[i].entities.media[0].sizes.small.h],
+							[data[i].entities.media[0].sizes.medium.w, data[i].entities.media[0].sizes.medium.h],
+							[data[i].entities.media[0].sizes.large.w, data[i].entities.media[0].sizes.large.h]
 							]
 						};
 						gallery.setImage(data[i].entities.media[0].media_url_https, imageObj);
@@ -293,12 +293,23 @@ window.fiGallery = (function (w, d) //initialize one global variable
 
 window.addEventListener('load', function (e)
 	{
-		var script = document.createElement("script");
-		script.src = "https://api.twitter.com/1/statuses/media_timeline.json?offset=0&count=500&score=true&is_event=false&filter=false&include_entities=true&user=grantimahara&callback=fiGallery.gallery";
-		document.getElementsByTagName("head")[0].appendChild(script);
+		d = document;
+		var listen = function(e)
+		{
+			var a = d.getElementById('handle').value;
+			alert(a);
+			if(a !== '')
+			{
+				d.getElementById('handle').style.display = 'none';
+				d.getElementById('start').style.display = 'none';
+				var script = d.createElement("script");
+				script.src = "https://api.twitter.com/1/statuses/media_timeline.json?offset=0&count=500&score=true&is_event=false&filter=false&include_entities=true&user="+a+"&callback=fiGallery.gallery";
+				d.getElementsByTagName("head")[0].appendChild(script);
+			}
+		};
+				d.getElementById('start').addEventListener('click', listen);
 
-		}
-	);
+	});
 
 
 
