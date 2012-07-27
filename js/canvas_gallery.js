@@ -38,10 +38,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 				}
 			}
 			img.src = src;
-			
-			
 		}
-		this.images = []; // used to store the actual image objects 
+		this.images = []; 
 		this.currentx = 10;
 		this.currenty = 10;
 		this.total = 0;
@@ -118,17 +116,12 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							gety(a-gallery.row);	
 						}
 					})(a);
+					//gallery.yValues.push(gallery.yVal);
 					
-					if(gallery.row === 1)
-					{
-						var b = 10;
-						for(var i in gallery.yValues)
-						{
-							b = b + gallery.yValues[i];
-						}
-						gallery.yVal = b+10;
-					}
+					
 				}
+				
+				
 				
 				if (Number(i) === 0)
 				{
@@ -178,7 +171,6 @@ window.fiGallery = (function (w, d) //initialize one global variable
 						gallery.currentx = 10;
 						gallery.currenty = 10 + gallery.currenty + gallery.imageProperties[i].sizes[1][1];
 					}
-					console.log(gallery.yVal);
 					gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.yVal, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 					if(window.innerHeight < gallery.currenty)
 						{
@@ -195,6 +187,8 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			gallery.canvas2d.fillStyle = 'hsl(255, 255, 255)';
 			gallery.canvas2d.fillRect(0, 0, gallery.canvas.width, gallery.canvas.height);
 			updateGallery.call(gallery);
+					console.log(this.imageProperties);
+
 		}
 		
 		
@@ -255,7 +249,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 					this.currentImage = this.imageProperties.length-1;	
 				}
 				var x  = (window.innerWidth * .5) - (this.imageProperties[this.currentImage].sizes[3][0] * .5),
-					y = (window.innerHeight * .5) - (this.imageProperties[this.currentImage].sizes[3][1] * .5);
+					y = 10;
 				this.canvas2d.drawImage(this.images[this.currentImage], x, y, this.imageProperties[this.currentImage].sizes[3][0], this.imageProperties[this.currentImage].sizes[3][1]);
 			},
 			39: function (e)
@@ -279,6 +273,10 @@ window.fiGallery = (function (w, d) //initialize one global variable
 	{
 		for (var i in this.imageProperties)
 			{ 
+				if(typeof(this.imageProperties[i].map === 'undefined'))
+				{
+					console.log(i);
+				}
 				this.canvas2d.drawImage(this.images[i], this.imageProperties[i].map.x, this.imageProperties[i].map.y, this.imageProperties[i].map.w, this.imageProperties[i].map.h);
 			}
 			
