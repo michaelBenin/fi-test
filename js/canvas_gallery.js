@@ -116,9 +116,6 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							gety(a-gallery.row);	
 						}
 					})(a);
-					//gallery.yValues.push(gallery.yVal);
-					
-					
 				}
 				
 				

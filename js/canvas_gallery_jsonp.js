@@ -40,22 +40,23 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			
 			
 		}
-		this.images = []; // used to store the actual image objects 
+		this.images = []; 
 		this.currentx = 10;
 		this.currenty = 10;
 		this.total = 0;
 		this.heightValues = [];
+		this.yValues = [];
+		this.yVal = 10;
+		this.row = 0;
 		this.currentImage;
 		this.state = 'gallery';
 		
 		
 		
 		//filter data
-		for(var i in gallery.data) // iterate through the data, some media did not have valid data to compare consecutively
+		for(var i in this.data) // iterate through the data, some media did not have valid data to compare consecutively
 			{
-				console.log(i);
-				console.log(data[i].entities.media);
-				if (typeof(data[i].entities.media) !== 'undefined' && data[i].entities.media.length !== 0)
+				if (typeof(data[i].entities.media[0]) !== 'undefined')
 				{
 						gallery.total++;
 						var title = 'Hashtag Unavailable', 
@@ -92,30 +93,51 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							[data[i].entities.media[0].sizes.large.w, data[i].entities.media[0].sizes.large.h]
 							]
 						};
-						gallery.setImage(data[i].entities.media[0].media_url_https, imageObj);
-				}
+						gallery.setImage(data[i].entities.media[0].media_url_https, imageObj);				}
 			}
-		
 			
 		this.init = function()
 		{
 			gallery.currentx = 10;
 			gallery.currenty = 10;
 			gallery.heightValues.length = 0;
+			gallery.yValues.length = 0;
+			gallery.yVal = 10;
+			gallery.row = 0;
 			
 			for (var i in gallery.imageProperties)
 			{
+				gallery.yVal = 10;
+				if (gallery.row !== 0)
+				{
+					var a = Number(i);
+					(function gety(a)
+					{
+						if (a - gallery.row >= 0)
+						{
+							gallery.yVal = gallery.yVal + gallery.yValues[a - gallery.row]+10;
+							gety(a-gallery.row);	
+						}
+					})(a);
+				}
+				
+				
 				
 				if (Number(i) === 0)
 				{
 					gallery.imageProperties[i]['map'] = {x:10, y:10, w: gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 					gallery.heightValues.push(gallery.imageProperties[i].sizes[1][1]);
-					gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];	
-				}
+					gallery.yValues.push(gallery.imageProperties[i].sizes[1][1]);
+                    gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];				}
 				else if (Number(i) < gallery.imageProperties.length-1)
 				{
 					if(gallery.currentx + gallery.imageProperties[i].sizes[1][0] >= window.innerWidth)
 					{
+						if(gallery.row === 0)
+						{
+							gallery.row = gallery.heightValues.length;	
+							gallery.yVal = gallery.yValues[0]+10;
+						}
 						gallery.currentx = 10;
 						gallery.heightValues.sort();
 						gallery.currenty = gallery.currenty + gallery.heightValues[gallery.heightValues.length-1] + 10;
@@ -128,15 +150,17 @@ window.fiGallery = (function (w, d) //initialize one global variable
 							gallery.height = window.innerHeight;	
 						}
 						gallery.heightValues.length = 0;
-						gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.currenty, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
+						gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.yVal, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
+						gallery.yValues.push(gallery.imageProperties[i].sizes[1][1]);
 						gallery.heightValues.push(gallery.imageProperties[i].sizes[1][1]);
 						gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];
 						
 					}
 					else if(gallery.currentx + gallery.imageProperties[i].sizes[1][0] < window.innerWidth)
 					{
+						gallery.yValues.push(gallery.imageProperties[i].sizes[1][1]);
 						gallery.heightValues.push(gallery.imageProperties[i].sizes[1][1]);
-						gallery.imageProperties[i]['map'] = {x: gallery.currentx, y: gallery.currenty, w: gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
+						gallery.imageProperties[i]['map'] = {x: gallery.currentx, y: gallery.yVal, w: gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 						gallery.currentx = gallery.currentx + 10 + gallery.imageProperties[i].sizes[1][0];
 					}
 				}
@@ -147,7 +171,7 @@ window.fiGallery = (function (w, d) //initialize one global variable
 						gallery.currentx = 10;
 						gallery.currenty = 10 + gallery.currenty + gallery.imageProperties[i].sizes[1][1];
 					}
-					gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.currenty, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
+					gallery.imageProperties[i]['map'] = {x:gallery.currentx, y:gallery.yVal, w:gallery.imageProperties[i].sizes[1][0], h:gallery.imageProperties[i].sizes[1][1]};
 					if(window.innerHeight < gallery.currenty)
 						{
 							gallery.height = gallery.currenty+gallery.imageProperties[i].sizes[1][1]+10;	
@@ -163,8 +187,9 @@ window.fiGallery = (function (w, d) //initialize one global variable
 			gallery.canvas2d.fillStyle = 'hsl(255, 255, 255)';
 			gallery.canvas2d.fillRect(0, 0, gallery.canvas.width, gallery.canvas.height);
 			updateGallery.call(gallery);
+					console.log(this.imageProperties);
+
 		}
-		
 		//Controller / Views: JS MV*/MVC/MVVC Backbone/Angular/Ember, No thanks, I'll write my own but know how to use them if entering a project	
 		this.canvas.addEventListener('click', function(e) 
 		{ 
