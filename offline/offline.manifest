@@ -1,0 +1,9 @@
+CACHE MANIFEST
+..images/loader.png
+
+NETWORK:
+*
+myscript.js
+
+FALLBACK
+/ /offline.html

@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:fb="https://www.facebook.com/2008/fbml" xmlns:og="http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<html lang="en" manifest="offline/offline.manifest?v1" xmlns:fb="https://www.facebook.com/2008/fbml" xmlns:og="http://ogp.me/ns#">
 <head>
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
-	<link href="css/tablet.css" rel="stylesheet" type="text/css" media="all and (min-width: 481px) and (max-width: 768px)" />
-	<link href="css/mobile.css" rel="stylesheet" type="text/css" media="all and (min-width: 0px) and (max-width: 480px)" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/tablet_landscape.css" rel="stylesheet" type="text/css" media="all and (min-width: 481px) and (max-width: 768px) and (orientation:landscape)" />
+    <link href="css/tablet_portrait.css" rel="stylesheet" type="text/css" media="all and (min-width: 481px) and (max-width: 768px) and (orientation:portrait)" />
+	<link href="css/mobile_landscape.css" rel="stylesheet" type="text/css" media="all and (min-width: 0px) and (max-width: 480px) and (orientation:landscape)" />
+    <link href="css/mobile_portrait.css" rel="stylesheet" type="text/css" media="all and (min-width: 0px) and (max-width: 480px) and (orientation:portrait)" />
+    <!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 	<script type="text/javascript" src="js/canvas_gallery.js"></script>
 	<title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 	<meta property="og:title" content="" />
